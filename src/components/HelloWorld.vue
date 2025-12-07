@@ -32,12 +32,21 @@
       <div class="scroll-area">
         <!-- 轮播图组件 -->
         <div class="CarouselPic-section">
+          <h2>轮播图</h2>
           <CarouselPic
             :images="carouselImages"
             :interval="3000"
             :transition-speed="300"
           />
         </div>
+        <!-- 虚拟滚动区域 -->
+        <VirtualScroll
+          ref="virtualRef"
+          :item-height="60"
+          :container-height="500"
+          :total-count="10000"
+          :buffer-count="5"
+        />
       </div>
 
       <!-- footer区域 -->
@@ -59,12 +68,14 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import NestedMenu from "./NestedMenu.vue";
 import CarouselPic from "./CarouselPic.vue";
+import VirtualScroll from "./VirtualScroll.vue";
 
 // 响应式数据
 const isMenuOpen = ref(false);
 const isMobile = ref(false);
 const screenWidth = ref(window.innerWidth);
 const activeItem = ref("dashboard");
+const virtualRef = ref(null);
 
 // 菜单项数据
 const menus = [
@@ -196,6 +207,10 @@ const selectItem = (id) => {
   if (isMobile.value) {
     isMenuOpen.value = false;
   }
+
+  // if (id === "dashboard" && virtualRef.value) {
+  //   virtualRef.value.scrollToIndex(99);
+  // }
 };
 
 // 轮播图占位图
@@ -347,10 +362,10 @@ onBeforeUnmount(() => {
       padding: 12px 20px;
       height: 100px;
       display: flex;
-      width: calc(100% - 216px);
+      width: calc(100% - 16px);
       position: fixed;
       top: 0;
-      left: 200px;
+      left: 0px;
       z-index: 10;
       background-color: #1a252f;
     }
@@ -378,10 +393,10 @@ onBeforeUnmount(() => {
       padding: 12px 20px;
       height: 100px;
       display: flex;
-      width: calc(100% - 216px);
+      width: calc(100% - 16px);
       position: fixed;
       bottom: 0;
-      left: 200px;
+      left: 0px;
       z-index: 10;
       background-color: #1a252f;
     }

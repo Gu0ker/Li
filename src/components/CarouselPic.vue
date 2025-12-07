@@ -106,14 +106,6 @@ const currentX = ref(0);
 const isDragging = ref(false);
 const dragThreshold = 50;
 
-// 计算当前展示的真实索引
-computed(() => {
-  if (props.images.length <= 1) return 0;
-  if (currentSlide.value < 0) return props.images.length - 1;
-  if (currentSlide.value >= props.images.length) return 0;
-  return currentSlide.value;
-});
-
 // 计算轮播图样式
 const slidesStyle = computed(() => {
   const offset = props.images.length > 1 ? 1 : 0;
