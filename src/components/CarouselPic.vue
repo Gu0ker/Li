@@ -202,8 +202,10 @@ const resetAutoPlay = () => {
 };
 
 // 切换自动轮播状态
-isAutoPlaying.value = !isAutoPlaying.value;
-resetAutoPlay();
+() => {
+  isAutoPlaying.value = !isAutoPlaying.value;
+  resetAutoPlay();
+};
 
 // 触摸开始事件
 const handleTouchStart = (event) => {
