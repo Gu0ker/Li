@@ -23,12 +23,27 @@
 
     <!-- 右侧内容区域 -->
     <div class="content-area">
-      <p>滚动测试标题</p>
-      <div class="test-scroll">
-        <div class="test-box" v-for="n in 30" :key="n">
-          <h4>测试 {{ n }}</h4>
+      <!-- header区域 -->
+      <header class="content-header">
+        <h1>这是header</h1>
+      </header>
+
+      <!-- 无限滚动区域 -->
+      <div class="scroll-area">
+        <!-- 轮播图组件 -->
+        <div class="CarouselPic-section">
+          <CarouselPic
+            :images="carouselImages"
+            :interval="3000"
+            :transition-speed="300"
+          />
         </div>
       </div>
+
+      <!-- footer区域 -->
+      <footer class="content-footer">
+        <h1>这是footer</h1>
+      </footer>
     </div>
 
     <!-- 移动端菜单遮罩层 -->
@@ -43,6 +58,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import NestedMenu from "./NestedMenu.vue";
+import CarouselPic from "./CarouselPic.vue";
 
 // 响应式数据
 const isMenuOpen = ref(false);
@@ -182,6 +198,13 @@ const selectItem = (id) => {
   }
 };
 
+// 轮播图占位图
+const carouselImages = ref([
+  "https://placeholder.im/300x200/cccccc",
+  "https://placeholder.im/300x200/000000",
+  "https://placeholder.im/300x200/00cccc",
+]);
+
 // 检测屏幕宽度
 const checkScreenWidth = () => {
   screenWidth.value = window.innerWidth;
@@ -313,9 +336,28 @@ onBeforeUnmount(() => {
     flex: 1;
     display: flex;
     flex-direction: column;
+    // justify-content: center;
+    // align-items: flex-start;
     overflow: hidden;
+    box-sizing: border-box;
 
-    .test-scroll {
+    /* header区域 */
+    .content-header {
+      margin: 8px;
+      padding: 12px 20px;
+      height: 100px;
+      display: flex;
+      width: calc(100% - 216px);
+      position: fixed;
+      top: 0;
+      left: 200px;
+      z-index: 10;
+      background-color: #1a252f;
+    }
+
+    /* 无限滚动区域 */
+    .scroll-area {
+      margin: 150px 0 150px 0;
       display: flex;
       flex-direction: column;
       // justify-content: center;
@@ -324,12 +366,24 @@ onBeforeUnmount(() => {
       overflow-y: auto;
       overflow-x: hidden;
 
-      .test-box {
-        width: 100%;
-        height: 200px;
-        padding: 10px 20px;
-        background-color: #fff;
+      /* 轮播图区域 */
+      .CarouselPic-section {
+        margin-bottom: 2%;
       }
+    }
+
+    /* fooder区域 */
+    .content-footer {
+      margin: 8px;
+      padding: 12px 20px;
+      height: 100px;
+      display: flex;
+      width: calc(100% - 216px);
+      position: fixed;
+      bottom: 0;
+      left: 200px;
+      z-index: 10;
+      background-color: #1a252f;
     }
   }
 

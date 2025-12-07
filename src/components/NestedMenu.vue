@@ -151,10 +151,10 @@ const handleItemClick = (id, hasChildren) => {
   }
 
   // 子菜单样式
-  :deep(.nav-menu) {
-    .nav-item {
+  // :deep(.nav-menu) {
+    // .nav-item {
       // padding: 20px 0 0 12px;
-    }
-  }
+    // }
+  // }
 }
 </style>
