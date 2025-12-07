@@ -14,17 +14,11 @@
 
     <!-- 左侧导航栏 -->
     <nav class="sidebar" :class="{ open: isMenuOpen, mobile: isMobile }">
-      <ul class="nav-menu">
-        <li
-          v-for="item in menus"
-          :key="item.id"
-          class="nav-item"
-          :class="{ active: activeItem === item.id }"
-          @click="selectItem(item.id)"
-        >
-          <span class="nav-text">{{ item.name }}</span>
-        </li>
-      </ul>
+      <NestedMenu
+        :menus="menuTree"
+        :active-item="activeItem"
+        @select="selectItem"
+      />
     </nav>
 
     <!-- 右侧内容区域 -->
@@ -47,13 +41,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import NestedMenu from "./NestedMenu.vue";
 
 // 响应式数据
 const isMenuOpen = ref(false);
 const isMobile = ref(false);
 const screenWidth = ref(window.innerWidth);
-const activeItem = ref(1);
+const activeItem = ref("dashboard");
 
 // 菜单项数据
 const menus = [
@@ -139,6 +134,40 @@ const menus = [
     parentId: "reports-sales",
   },
 ];
+
+// 将扁平菜单数据转换为树形结构
+const menuTree = computed(() => {
+  const menuMap = {};
+  const tree = [];
+
+  // 首先将所有菜单项存入映射表
+  menus.forEach((menu) => {
+    menuMap[menu.id] = {
+      ...menu,
+      children: [],
+    };
+  });
+
+  // 构建树形结构
+  menus.forEach((menu) => {
+    const menuItem = menuMap[menu.id];
+    if (menu.parentId === null) {
+      // 一级菜单
+      tree.push(menuItem);
+    } else {
+      // 子菜单，添加到父菜单的children中
+      if (menuMap[menu.parentId]) {
+        menuMap[menu.parentId].children.push(menuItem);
+      } else {
+        // 如果父菜单不存在，则作为一级菜单处理
+        tree.push(menuItem);
+      }
+    }
+  });
+  console.log("menuTree", tree, menus);
+
+  return tree;
+});
 
 // 切换菜单状态
 const toggleMenu = () => {
@@ -235,33 +264,35 @@ onBeforeUnmount(() => {
     transition: transform 0.3s ease;
     z-index: 1000;
     flex-shrink: 0;
+    padding: 30px 0;
+    overflow-y: auto;
 
-    .nav-menu {
-      list-style: none;
-      flex: 1;
-      padding: 30px 0;
-      overflow-y: auto;
+    // .nav-menu {
+    //   list-style: none;
+    //   flex: 1;
+    //   padding: 30px 0;
+    //   overflow-y: auto;
 
-      .nav-item {
-        padding: 12px 20px;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        border-left: 4px solid transparent;
+    //   .nav-item {
+    //     padding: 12px 20px;
+    //     display: flex;
+    //     align-items: center;
+    //     cursor: pointer;
+    //     transition: all 0.2s ease;
+    //     border-left: 4px solid transparent;
 
-        .nav-text {
-          font-size: 16px;
-        }
-      }
-      .nav-item:hover {
-        background-color: #34495e;
-      }
-      .nav-item.active {
-        background-color: #3498db;
-        border-left-color: greenyellow;
-      }
-    }
+    //     .nav-text {
+    //       font-size: 16px;
+    //     }
+    //   }
+    //   .nav-item:hover {
+    //     background-color: #34495e;
+    //   }
+    //   .nav-item.active {
+    //     background-color: #3498db;
+    //     border-left-color: greenyellow;
+    //   }
+    // }
   }
 
   .sidebar.mobile {
