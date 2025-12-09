@@ -1,4 +1,3 @@
-<!-- VirtualScrollList.vue -->
 <template>
   <div class="virtual-scroll-section">
     <h2>长列表（虚拟滚动）</h2>

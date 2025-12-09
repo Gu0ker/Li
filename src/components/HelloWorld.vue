@@ -47,6 +47,9 @@
           :total-count="10000"
           :buffer-count="5"
         />
+        <!-- 今日天气区域 -->
+        <h2>今日天气</h2>
+        <TodayWeather ref="weatherRef" />
       </div>
 
       <!-- footer区域 -->
@@ -69,6 +72,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import NestedMenu from "./NestedMenu.vue";
 import CarouselPic from "./CarouselPic.vue";
 import VirtualScroll from "./VirtualScroll.vue";
+import TodayWeather from "./TodayWeather.vue";
 
 // 响应式数据
 const isMenuOpen = ref(false);
@@ -76,6 +80,7 @@ const isMobile = ref(false);
 const screenWidth = ref(window.innerWidth);
 const activeItem = ref("dashboard");
 const virtualRef = ref(null);
+const weatherRef = ref(null);
 
 // 菜单项数据
 const menus = [
